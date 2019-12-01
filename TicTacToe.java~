@@ -1,0 +1,78 @@
+/**
+ * This program allows two player to play the Tic Tac Toe board game
+ * Date Created: 06 17, 2016
+ * @Author: Udayakumar Praveen and Thomas Don
+ **/
+class TicTacToe
+{ /**
+ * Main Method
+ **/
+  public static void main(String[] args)
+  { 
+    // *** variables
+    Board ticTacToe = new Board(3, 3); //Creates the TicTacToe board
+    boolean stayInLoop=true; // This variable decides whether to exit the game or not
+    int counter=0;// This variable stores the number of pegs there are in the board. This could also decide to exit the main loop or not
+    int location[]= new int[2];// This array stores the coordinates(Row and Coloumn) of the place where the user clicks
+    String colour[]={"red","blue"};// This String array stores the colour strings, which will be later used to simplify the program
+    int points[][] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // This Array stores the locations where player 1 and 2 click on the board. (Player 1= 1),(Player 2= 2)
+    
+    //This is the main loop of the program 
+    while((stayInLoop==true)&&(counter<9))//It stays in the program as long as the 'counter' is not more than '9' and stayInLoop is not false
+    {
+      for(int playerNumber=1;((playerNumber<=2)&&(stayInLoop==true)&&(counter<9));playerNumber++)// This Loop lets Player 1 and 2 make their move
+      {
+        do// This loop makes sure that when the player presses a previous stored location, the program doesn't store that location again.
+        {
+          // *** variable and input
+          Coordinate point = ticTacToe.getClick();// Finds and stores the location where the player clicked 
+          // *** processing
+          location[0] = point.getRow();// Stores the coordinate value of the row
+          location[1] = point.getCol();//// Stores the coordinate value of the coloumn
+        }
+        while ((points[location[0]][location[1]])!=0);// This loop will only exit when the player clicks a location that was not previously pressed 
+        
+        // *** processing
+        ++counter;// Stores the number of pegs there are on the board
+        points[location[0]][location[1]]=playerNumber;// Stores the location where the player clicked. If Player 1 pressed it will be assigned with 1, (Player 2 = 2)
+        // *** output
+        ticTacToe.putPeg(colour[playerNumber-1], location[0], location[1]);//This displays the coloured pegs on the screen, the colour array is used here
+        // *** processing
+        stayInLoop=!(winner(points,playerNumber));//Checks if the player won or not. If the player won, stayInLoop will be false
+        
+        // *** processing
+        if (stayInLoop==false)//This will be true when the variable is false
+          // *** output
+          ticTacToe.displayMessage("Player "+playerNumber+" wins");// Prints which Player won
+        else if (counter>=9)// If there are 9 pegs on the board then this will be executed  
+          // *** output
+          ticTacToe.displayMessage("Tie game");// It prints "tie game"       
+      }
+    }
+  }
+  /** *** Method
+    * This method checks if the Player that made the move won or not
+    * parameter: "pointLocations[][]" takes in where all the pegs(red(1) and blue(2)) are on the board
+    * parameter: "player" stores which player is playing for example: 1 or 2, which is used for calculation
+    **/
+  public static boolean winner(int pointLocations[][], int player)
+  {
+    // *** variables
+    boolean playerWon=false;// this stores if the player won(true) or not(false) 
+    for (int i=0;i<=2;i++)// This loop helps to check if the player won. This loop also helps to simplify the checking process
+    {
+      // *** processing
+      if (((pointLocations[i][0]==player)&&(pointLocations[i][1]==player)&&(pointLocations[i][2]==player))||// Checks if there is a horizontal match
+          ((pointLocations[0][i]==player)&&(pointLocations[1][i]==player)&&(pointLocations[2][i]==player))||// Checks if there is a vertical match
+          ((pointLocations[0][i]==player)&&(pointLocations[1][1]==player)&&(pointLocations[2][2-i]==player)))// Checks if there is a diagonal match
+      {
+        // *** processing
+        playerWon=true;// when the if statement becomes true, then this varaible will be assigned with true
+      }
+    }
+    // *** processing
+    return playerWon;// returns a true or false value. If true then the Player that made the move won. 
+  }
+}
+
+   
